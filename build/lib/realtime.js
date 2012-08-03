@@ -14,7 +14,7 @@
     var io;
     io = require('socket.io').listen(server);
     io.configure('production', function() {
-      io.set('origins', 'http://http://lechat-client-brunch.herokuapp.com/:*');
+      io.set('origins', 'http://lechat-client-brunch.herokuapp.com/:*');
       io.enable('browser client minification');
       io.enable('browser client etag');
       io.enable('browser client gzip');

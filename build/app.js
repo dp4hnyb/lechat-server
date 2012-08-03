@@ -31,16 +31,18 @@
     return app.use(express.errorHandler());
   });
 
-  app.configure('production', function() {});
+  app.configure('production', function() {
+    return app.set('io configure', function(io) {
+      io.set('transports', ['xhr-polling']);
+      return io.set('polling duration', 10);
+    });
+  });
 
   app.get('/', routes.index);
 
   server = http.createServer(app);
 
-  realtime = require('./lib/realtime')(server, {
-    uri: app.get('db uri'),
-    collection: app.get('db collection')
-  });
+  realtime = require('./lib/realtime')(server, app);
 
   server.listen(app.get('port'), function() {
     return console.log("Express server listening on port " + (app.get('port')));

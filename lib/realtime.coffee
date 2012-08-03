@@ -3,13 +3,18 @@
 ###
 db = require './mongodb'
  
-module.exports = (server, db_config) ->
+module.exports = (server, app) ->
   
   # bind socket.io
   io = require('socket.io').listen(server)
+  
+  # configure socket.io if configure was specified
+  if (config_fn = app.get('io configure'))?
+    io.configure ->
+      config_fn.call(io, io)
 
   # connect to the database and get the collection
-  db.connect db_config.uri, db_config.collection, (err, pubsub) ->
+  db.connect app.get('db uri'), app.get('db collection'), (err, pubsub) ->
     if err?
       console.log err
       process.exit 1
@@ -34,7 +39,7 @@ module.exports = (server, db_config) ->
       #     [from: id of the sender (for reply)]
       #     
       socket.on 'post', (post_data) ->
-        pubsub.publish data.channel, {event: 'receive', data: post_data.message}
+        pubsub.publish post_data.channel, {event: 'receive', data: post_data.message}
           
       # when a user wants to invite another to a channel
       # data =

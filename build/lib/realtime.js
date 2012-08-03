@@ -10,10 +10,15 @@
 
   db = require('./mongodb');
 
-  module.exports = function(server, db_config) {
-    var io;
+  module.exports = function(server, app) {
+    var config_fn, io;
     io = require('socket.io').listen(server);
-    db.connect(db_config.uri, db_config.collection, function(err, pubsub) {
+    if ((config_fn = app.get('io configure')) != null) {
+      io.configure(function() {
+        return config_fn.call(io, io);
+      });
+    }
+    db.connect(app.get('db uri'), app.get('db collection'), function(err, pubsub) {
       if (err != null) {
         console.log(err);
         process.exit(1);
@@ -29,7 +34,7 @@
           });
         });
         socket.on('post', function(post_data) {
-          return pubsub.publish(data.channel, {
+          return pubsub.publish(post_data.channel, {
             event: 'receive',
             data: post_data.message
           });

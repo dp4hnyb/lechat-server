@@ -7,6 +7,7 @@ MongoDbPubSubAdapter = require './mongodb/pubsub'
 #
 exports.connect = (urlstring, collection_name, callback) ->
   mongo.Db.connect urlstring, (err, db) ->
+    return callback err, null if err?
     theurl = url.parse urlstring
     console.log "Attempting connection to #{theurl.protocol}//#{theurl.hostname} (complete URL suppressed)"
     # select the capped collection 'messages'

@@ -27,6 +27,10 @@ app.configure 'development', ->
   
 # produciton-specific configuration
 app.configure 'production', ->
+  # for Heroku
+  app.set 'io configure', (io) ->
+    io.set 'transports', ['xhr-polling']
+    io.set 'polling duration', 10
 
 
 
@@ -37,10 +41,7 @@ app.get '/', routes.index
 server = http.createServer(app)
 
 # add realtime server
-realtime = require('./lib/realtime')(server, {
-  uri: app.get 'db uri'
-  collection: app.get 'db collection'
-})
+realtime = require('./lib/realtime')(server, app)
 
 # start listening on port
 server.listen app.get('port'), ->

@@ -11,6 +11,9 @@
   exports.connect = function(urlstring, collection_name, callback) {
     return mongo.Db.connect(urlstring, function(err, db) {
       var coll, theurl;
+      if (err != null) {
+        return callback(err, null);
+      }
       theurl = url.parse(urlstring);
       console.log("Attempting connection to " + theurl.protocol + "//" + theurl.hostname + " (complete URL suppressed)");
       return db.collection((coll = collection_name), function(err, collection) {

@@ -38,7 +38,9 @@
         'sort': [['$natural', 1]]
       }, function(err, cursor) {
         return (new CursorWithInterval(cursor, 300)).each(function(err, item) {
-          return callback(err, item.data);
+          if (!(err != null) && (item != null) && (item.data != null)) {
+            return callback(err, item.data);
+          }
         });
       });
     };

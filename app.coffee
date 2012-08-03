@@ -27,10 +27,6 @@ app.configure 'development', ->
   
 # produciton-specific configuration
 app.configure 'production', ->
-  # for Heroku
-  app.set 'io configure', (io) ->
-    io.set 'transports', ['xhr-polling']
-    io.set 'polling duration', 10
 
 
 

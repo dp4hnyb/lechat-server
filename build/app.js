@@ -31,12 +31,7 @@
     return app.use(express.errorHandler());
   });
 
-  app.configure('production', function() {
-    return app.set('io configure', function(io) {
-      io.set('transports', ['xhr-polling']);
-      return io.set('polling duration', 10);
-    });
-  });
+  app.configure('production', function() {});
 
   app.get('/', routes.index);
 

@@ -11,13 +11,17 @@
   db = require('./mongodb');
 
   module.exports = function(server, app) {
-    var config_fn, io;
+    var io;
     io = require('socket.io').listen(server);
-    if ((config_fn = app.get('io configure')) != null) {
-      io.configure(function() {
-        return config_fn.call(io, io);
-      });
-    }
+    io.configure('production', function() {
+      io.set('origins', 'lechat-client-brunch.herokuapp.com');
+      io.enable('browser client minification');
+      io.enable('browser client etag');
+      io.enable('browser client gzip');
+      io.set('log level', 1);
+      io.set('transports', ['xhr-polling']);
+      return io.set('polling duration', 10);
+    });
     db.connect(app.get('db uri'), app.get('db collection'), function(err, pubsub) {
       if (err != null) {
         console.log(err);

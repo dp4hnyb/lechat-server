@@ -8,10 +8,16 @@ module.exports = (server, app) ->
   # bind socket.io
   io = require('socket.io').listen(server)
   
-  # configure socket.io if configure was specified
-  if (config_fn = app.get('io configure'))?
-    io.configure ->
-      config_fn.call(io, io)
+  # configure socket.io
+  # production configuration (for Heroku)
+  io.configure 'production', ->
+    io.set('origins', 'lechat-client-brunch.herokuapp.com')
+    io.enable('browser client minification')  # send minified client
+    io.enable('browser client etag')          # apply etag caching logic based on version number
+    io.enable('browser client gzip')          # gzip the file
+    io.set('log level', 1);
+    io.set('transports', ['xhr-polling'])
+    io.set('polling duration', 10)
 
   # connect to the database and get the collection
   db.connect app.get('db uri'), app.get('db collection'), (err, pubsub) ->

@@ -9,7 +9,7 @@ module.exports = (server, db_config) ->
   io = require('socket.io').listen(server)
 
   # connect to the database and get the collection
-  db.connect "mongodb://#{db_config.host}/#{db_config.database}", db_config.collection, (err, pubsub) ->
+  db.connect db_config.uri, db_config.collection, (err, pubsub) ->
     if err?
       console.log err
       process.exit 1

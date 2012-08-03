@@ -18,8 +18,7 @@ app.configure ->
   app.use(require('stylus').middleware(__dirname + '/public'))
   app.use(express.static(path.join(__dirname, 'public')))
   # MongoDb settings
-  app.set('db host', process.env.DB_HOST || 'localhost')
-  app.set('db database', process.env.DB_DATABASE || 'testdatabase')
+  app.set('db uri', process.env.DB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/testdatabase')
   app.set('db collection', process.env.DB_COLLECTION || 'messages')
 
 # developement-specific configuration
@@ -39,8 +38,7 @@ server = http.createServer(app)
 
 # add realtime server
 realtime = require('./lib/realtime')(server, {
-  host: app.get 'db host'
-  database: app.get 'db database'
+  uri: app.get 'db uri'
   collection: app.get 'db collection'
 })
 

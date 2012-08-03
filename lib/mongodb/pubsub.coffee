@@ -20,7 +20,8 @@ module.exports = class MongoDbPubSubAdapter
     # query the database and return a tailable cursor which calls 'callback' for every new item
     @collection.find conditions, {'tailable': 1, 'sort': [['$natural', 1]]}, (err, cursor) ->
       (new CursorWithInterval(cursor, 300)).each (err, item) ->
-        callback(err, item.data) if !err? && item? && item.data?
+        console.log 'cursor', [err, item]
+        callback(err, item.data)
       
       
 # utility function which gives the current time

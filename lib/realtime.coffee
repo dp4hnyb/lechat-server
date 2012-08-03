@@ -11,7 +11,7 @@ module.exports = (server, app) ->
   # configure socket.io
   # production configuration (for Heroku)
   io.configure 'production', ->
-    io.set('origins', 'lechat-client-brunch.herokuapp.com')
+    io.set('origins', 'http://lechat-client-brunch.herokuapp.com')
     io.enable('browser client minification')  # send minified client
     io.enable('browser client etag')          # apply etag caching logic based on version number
     io.enable('browser client gzip')          # gzip the file

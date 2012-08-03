@@ -1,0 +1,28 @@
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript', src='/socket.io/socket.io.js')
+    script(type='text/javascript)
+      var socket = io.connect('http://localhost:3000');
+      
+      socket.on('receive', function (data) {
+        console.log('received', data);
+      });
+      
+      login = function (user_id) {
+        socket.emit('join', {channel: user_id});
+        socket.on('joined', function(data) {
+          console.log('joined! channel='+data.channel, data);
+          window.post = function (body, recipient_id) {
+            var message = {from: data.channel, body: body};
+            console.log('posting to '+recipient_id, body);
+            socket.emit('post', {channel: recipient_id, message: message});
+          };
+        });
+      };
+      
+      
+  body
+    block content
